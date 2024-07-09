@@ -1,0 +1,13 @@
+p {
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+  }
+
+.paddle {
+  position: relative;
+  height: 70px;
+  width: 8px;
+  border-radius: 20px;
+}
