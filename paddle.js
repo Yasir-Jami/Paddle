@@ -1,17 +1,18 @@
 class Paddle {
-  constructor (xpos, ypos, score) {
+  constructor (xpos, ypos, score, playernumber) {
     this.xpos = xpos    // horizontal position of paddle
     this.ypos = ypos;   // vertical position of paddle
     this.score = score; // player's current score
+    this.playernumber = playernumber; // player number
   }
 
   moveUp(){
     this.ypos = y.pos - 10;
-    console.log(`Player 1 ypos: " + ${this.ypos}`)
+    console.log(`Player ${this.playernumber} ypos: " + ${this.ypos}`)
   }
   moveDown(){
     this.ypos = y.pos + 10;
-    console.log(`Player 1 ypos: " + ${this.ypos}`)
+    console.log(`Player ${this.playernumber} ypos: " + ${this.ypos}`)
   }
 }
 
@@ -46,9 +47,22 @@ class Ball {
 }
 
 // Player 1 and 2 start across from each other, at the same y position
-const p1 = new Paddle(0, 20, 0);
-const p2 = new Paddle(50, 20, 0);
-const ball = new Ball(10, 25, 0);
+let p1 = new Paddle(0, 20, 0);
+let p2 = new Paddle(50, 20, 0);
+let ball = new Ball(10, 25, 0);
+
+// Initialize everything
+let p1score = document.getElementById("p1-score");
+let p2score = document.getElementById("p2-score");
+p1score.innerText = 0;
+p2score.innerText = 0;
+
+// Main game loop
+let paddle1 = document.getElementById("p1-paddle");
+let paddle2 = document.getElementById("p2-paddle");
+
+paddle1.style.background = 'red';
+paddle2.style.background = 'blue';
 
 // Wait for enter or spacebar key to be pressed. Set players at starting position.
 function gameStart(){
@@ -86,16 +100,7 @@ function initialize(){
 
 }
 
-document.getElementById("p1-score").innerText = 0;
-document.getElementById("p2-score").innerText = 0;
-
-// Main game loop
-let paddle1 = document.getElementById("p1-paddle");
-let paddle2 = document.getElementById("p2-paddle");
-
-paddle1.style.background = 'red';
-paddle2.style.background = 'blue';
-
+// Keyboard listener
 document.addEventListener("keydown", function(e) {
   let key = e.which;
   e.preventDefault();
@@ -117,6 +122,9 @@ document.addEventListener("keydown", function(e) {
       paddle2.style.background = 'green';
       paddle2.style.right = 50;
       break;
+    case 32: // Spacebar
+      //gameStart();
+      p2score.innerText = parseInt(p2score.innerText) + 1;
   }
 })
 

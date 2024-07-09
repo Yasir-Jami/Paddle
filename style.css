@@ -1,8 +1,16 @@
-p {
+p{
     font-family: "Roboto Mono", monospace;
     font-optical-sizing: auto;
     font-weight: 600;
     font-style: normal;
+}
+
+.player-scores {
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    
   }
 
 .paddle {
