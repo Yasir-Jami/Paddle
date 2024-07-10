@@ -1,12 +1,9 @@
 class Paddle {
   constructor (xPos, yPos, score, playernumber) {
-    this.length = length; // paddle length/height
     this.xPos = xPos    // horizontal position of paddle
     this.yPos = yPos;   // vertical position of paddle
     this.score = score; // player's current score
     this.playernumber = playernumber; // player number
-
-    //this.style.background = 'orange';
   }
 
   moveUp(yPos){
@@ -96,18 +93,18 @@ let paddle2 = document.getElementById("p2-paddle");
 paddle1.style.background = 'red';
 paddle2.style.background = 'blue';
 
-// Declare paddle positions
-let paddle1TopPos = paddle1.offsetTop;
-let paddle1BottomPos = paddle1TopPos + paddle1.offsetWidth;
-let paddle2LeftPos = paddle2.offsetLeft;
-let paddle2RightPos = paddle2LeftPos + paddle2.offsetWidth;
+// Declare paddle position
+let distance = 20;
 let speed = 5;
 let direction = 1;
 
 // Player 1 and 2 start across from each other, at the same y position
-let p1 = new Paddle(80, 0, 20, 0, 1);
-let p2 = new Paddle(80, 300, 20, 0, 2);
+let p1 = new Paddle(80, 0, 20, 1);
+let p2 = new Paddle(80, 300, 20, 2);
 let ball = new Ball(10, 25, 0);
+
+let p1Ypos = paddle1.top = 0;
+let p2Ypos = paddle2.top = 300;
 
 // Initialize variables
 let p1score = document.getElementById("p1-score");
@@ -120,27 +117,26 @@ document.addEventListener("keydown", function(e) {
   let key = e.which;
   e.preventDefault();
 
-  paddle1TopPos = paddle1.offsetTop;
-  paddle1BottomPos = paddle1TopPos + paddle1.offsetHeight;
-  paddle2TopPos = paddle2.offsetTop;
-  paddle2BottomPos = paddle2TopPos + paddle2.offsetHeight;
-
   switch(key){
     case 87: // W key
-      p1.moveUp(paddle1TopPos);
-      paddle1.style.bottom = (paddle1TopPos + speed * direction) + 'px';
+      p1Ypos = p1Ypos - distance;
+      paddle1.style.top = ((p1Ypos) * direction) + 'px';
+      p1.moveUp(p1Ypos);
       break;
     case 83: // S key
-      p1.moveDown(paddle1BottomPos);
-      paddle1.style.top = (paddle1TopPos + speed * direction) + 'px';
+      p1Ypos = p1Ypos + distance;
+      paddle1.style.top = ((p1Ypos) * direction) + 'px';
+      p1.moveDown(p1Ypos);
       break;
     case 38: // Up arrow
-      p2.moveUp(paddle2TopPos);
-      paddle2.style.bottom = (paddle2TopPos + speed * direction) + 'px';
+      p2Ypos = p2Ypos - distance;
+      paddle2.style.top = ((p2Ypos) * direction) + 'px';
+      p2.moveUp(p2Ypos);
       break;
     case 40: // Down arrow
-      p2.moveDown(paddle2BottomPos);
-      paddle2.style.top = (paddle2TopPos + speed * direction) + 'px';
+      p2Ypos = p2Ypos + distance;
+      paddle2.style.top = ((p2Ypos) * direction) + 'px';
+      p2.moveDown(p2Ypos);
       break;
     case 32: // Spacebar
       //gameStart();
