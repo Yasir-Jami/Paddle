@@ -5,17 +5,15 @@ p{
     font-style: normal;
 }
 
-.player-scores {
-    font-family: "Roboto Mono", monospace;
-    font-optical-sizing: auto;
-    font-weight: 600;
-    font-style: normal;
-    
+.player-score {
+    display: inline;
+    padding-right: 300px;
   }
 
 .paddle {
   position: relative;
-  height: 70px;
+  margin-top: 30px;
+  height: 80px;
   width: 8px;
   border-radius: 20px;
 }

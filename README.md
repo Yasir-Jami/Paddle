@@ -1,11 +1,11 @@
 ### Paddle
 
-This is a two-player web game using HTML and JavaScript. The objective of the game is to hit the ball past your opponent's paddle.
+This is a two-player web game made with HTML and JavaScript. The objective of the game is to hit the ball past your opponent's paddle and reach a score of 9 first.
 
-* Player 1 controls the left paddle and uses the WASD keys.
+* The game will start upon pressing spacebar.
 
-* Player 2 controls the right paddle and uses the arrow keys.
+* Player 1 controls the left paddle and uses W and S keys to move up and down.
 
-* The game starts upon hitting the spacebar or enter key.
+* Player 2 controls the right paddle and uses the up and down arrow keys to move up and down.
 
-* The game ends when one player scores 8 points, after which it displays the winner and the game resets.
+* The game ends when one player scores 9 points, after which it displays the winner and the game resets. Press spacebar to get the ball moving again.
