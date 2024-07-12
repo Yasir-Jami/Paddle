@@ -7,13 +7,32 @@ p{
 
 .player-score {
     display: inline;
-    padding-right: 300px;
+    padding-right: 487px;
   }
 
-.paddle {
+.paddle1 {
   position: absolute;
-  margin-top: 30px;
+  margin-top: 100px;
   height: 80px;
   width: 8px;
   border-radius: 20px;
+}
+
+.paddle2 {
+  position: absolute;
+  margin-top: 100px;
+  margin-left: 500px;
+  height: 80px;
+  width: 8px;
+  border-radius: 20px;
+}
+
+.paddle-ball {
+  position: absolute;
+  background-color: black;
+  margin-top: 200px;
+  margin-left: 300px;
+  height: 8px;
+  width: 8px;
+  border-radius: 10px;
 }
