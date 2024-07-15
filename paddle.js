@@ -21,27 +21,28 @@ class Paddle {
 }
 
 class Ball {
-  constructor (xPos, yPos, speed, direction, angle){
+  constructor (xPos, yPos, speed, distance, direction, angle){
     this.xPos = xPos;
     this.yPos = yPos;
-    this.speed = speed; // determines how many pixels the ball's xPos changes per tick
+    this.speed = speed; // determines how often the ball's xPos changes
+    this.distance = distance; 
     this.direction = direction;
-    this.angle; // determines how many pixels the ball's yPos changes per tick
+    this.angle; // determines how often the ball's yPos changes
   }
 
   // Called when colliding with a paddle
   paddleBounce(paddleYpos){
     // On paddle collision, reverse direction; angle depends on section of paddle hit (top, middle, bottom)
     // Top
-    if (ball.yPos < paddleYpos*0.4) {
+    if (ball.yPos < paddleYpos*0.45) {
       this.angle = -20;
     }
     // Middle
-    else if (ball.yPos >= (paddleYPos *0.4) && ball.yPos <= (paddleYPos*0.6) ) {
+    else if (ball.yPos >= (paddleYPos*0.45) && ball.yPos <= (paddleYPos*0.55) ) {
       this.angle = 0;
     }
     // Bottom
-    else if (ball.yPos > paddleYPos * 0.6){
+    else if (ball.yPos > (paddleYPos*0.55)){
       this.angle = 20;
     }
 
@@ -80,14 +81,18 @@ class Ball {
   }
 
   // Called when ball moves
-  ballMove(paddleBall, i){
-    this.xPos = (i*20);
-    if (this.xPos > 200){
-      this.xPos = this.xPos - 100;
-    }
-    //this.yPos = (i*2*-1);
+  ballMove(paddleBall){
+    /*
+    console.log("Previous ball xPos: " + this.xPos);
+    console.log("Ball distance: " + this.distance);
+    console.log("Ball direction: " + this.direction);
+    */
+    this.xPos = this.xPos + (this.distance * this.direction);
+    this.yPos = this.yPos + (this.angle * this.direction);
     paddleBall.style.left = this.xPos + 'px';
-    //paddleBall.style.top = this.yPos + 'px';
+    paddleBall.style.top = this.yPos + 'px';
+    //console.log("Current ball xPos: " + this.xPos);
+    //console.log("Current ball yPos: " + this.yPos);
   }
 }
 
@@ -130,11 +135,10 @@ paddle2.style.background = 'blue';
 // Player 1 and 2 start across from each other, at the same y position
 let p1 = new Paddle(0, 0, 20, 1, 300);
 let p2 = new Paddle(500, 400, 20, 2, 20);
-let ball = new Ball(10, 25, 5);
+let ball = new Ball(10, 25, 5, 10, 1, 0);
 // Declare paddle and ball variables
 let distance = 20;
 let speed = 5;
-ball.direction = 1;
 let p1Ypos = paddle1.top = 0;
 let p2Ypos = paddle2.top = 0;
 
@@ -151,20 +155,28 @@ document.addEventListener("keydown", function(e) {
 
   switch(key){
     case 87: // W key
-      p1Ypos = p1Ypos - distance;
-      p1.moveUp(p1Ypos, paddle1);
+      if (p1Ypos != -60){
+        p1Ypos = p1Ypos - distance;
+        p1.moveUp(p1Ypos, paddle1);
+      }
       break;
     case 83: // S key
+    if (p1Ypos != 180){
       p1Ypos = p1Ypos + distance;
       p1.moveDown(p1Ypos, paddle1);
+    }
       break;
     case 38: // Up arrow
+    if (p2Ypos != -60){
       p2Ypos = p2Ypos - distance;
       p2.moveUp(p2Ypos, paddle2);
+    }
       break;
     case 40: // Down arrow
+    if (p2Ypos != 180){
       p2Ypos = p2Ypos + distance;
       p2.moveDown(p2Ypos, paddle2);
+    }
       break;
     case 32: // Spacebar
       gameStart();
@@ -173,16 +185,26 @@ document.addEventListener("keydown", function(e) {
   }
 })
 
-  let time = ball.speed*100; // Change formula as necessary
-  let i = 0;
+  let time = ball.speed*10; // Change formula as necessary
 
   setInterval(function() {
-    if (ball.xPos >= p1.xPos){
+    if (ball.xPos >= p1.xPos && ball.yPos 
+        >= p1.yPos && ball.yPos < p1.yPos + 80){
+      console.log("Player 1 bounce!");
       ball.paddleBounce(p1.yPos);
     }
-    else if (ball.xPos <= p2.xPos) {
+    else if (ball.xPos >= p2.xPos && ball.yPos 
+              >= p2.yPos && ball.yPos < p2.yPos + 80) {
+      console.log("Player 2 bounce!")
       ball.paddleBounce(p2.yPos);
     }
-    i++;
-    ball.ballMove(paddleball, i);
+
+    if (ball.xPos > 200){
+      ball.direction = -1;
+    }
+
+    if (ball.xPos === -300){
+      ball.direction = 1;
+    }
+    ball.ballMove(paddleball);
   }, time);
