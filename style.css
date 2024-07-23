@@ -36,3 +36,10 @@ p{
   width: 8px;
   border-radius: 10px;
 }
+
+#winner {
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
