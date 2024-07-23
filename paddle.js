@@ -9,17 +9,15 @@ class Paddle {
   }
 
   moveUp(yPos, paddle){
-    console.log(this.yPos);
     this.yPos = yPos - this.distance;
     this.height = this.yPos + 80;
-    paddle.style.top = yPos + 'px';
+    paddle.style.top = this.yPos + 'px';
     console.log(`Player ${this.playerNumber} yPos: ${yPos}`);
   }
   moveDown(yPos, paddle){
-    console.log(this.yPos);
     this.yPos = yPos + this.distance;
     this.height = this.yPos + 80;
-    paddle.style.top = yPos + 'px';
+    paddle.style.top = this.yPos + 'px';
     console.log(`Player ${this.playerNumber} yPos: ${yPos}`)
   }
 }
@@ -34,46 +32,65 @@ class Ball {
     this.angle = 0; // determines how often the ball's yPos changes
   }
 
+  checkPosition(p1Xpos, p1Ypos, p1Height, p2Xpos, p2Ypos, p2Height){
+    // Check for floor and ceiling collision
+    if (ball.yPos < -150){
+      this.wallBounce("top");
+    }
+    if (ball.yPos > 150){
+      this.wallBounce("bottom");
+    }
+
+    // Check paddle collision
+    if (this.xPos === p1Xpos && (this.yPos + 40)
+      >= p1Ypos && (this.yPos + 40) < p1Height){
+      console.log("Player 1 bounce!");
+      ball.paddleBounce(p1Ypos);
+    }
+    else if (this.xPos === p2Xpos && (this.yPos + 40)
+            >= p2Ypos && (this.yPos + 40) < p2Height) {
+      console.log("Player 2 bounce!")
+      ball.paddleBounce(p2Ypos);
+    }
+    // Check if ball moved past either paddle
+    else if (this.xPos < p1Xpos || ball.xPos > p2Xpos) {
+      this.goal(this.xPos, p1.xPos, p2.xPos);
+    }
+  }
+
   // Called when colliding with a paddle
   paddleBounce(paddleYpos){
     // On paddle collision, reverse direction; angle depends on section of paddle hit (top, middle, bottom)
     // Top
-    if (ball.yPos < paddleYpos*0.45) {
-      this.angle = -20;
+
+    const ballYPos = ball.yPos + 40;
+    if (ballYPos < paddleYpos*0.45) {
+      this.angle = -10;
     }
     // Middle
-    else if (ball.yPos >= (paddleYPos*0.45) && ball.yPos <= (paddleYPos*0.55) ) {
+    else if (ballYPos >= (paddleYpos*0.45) && ballYPos <= (paddleYpos*0.55) ) {
       this.angle = 0;
     }
     // Bottom
-    else if (ball.yPos > (paddleYPos*0.55)){
-      this.angle = 20;
+    else if (ballYPos > (paddleYpos*0.55)){
+      this.angle = 10;
     }
 
-    // Bounce back to player 2
-    if (this.direction === 1){
-      this.direction = -1;
-    }
-    // Bounce back to player 1
-    else if (this.direction === -1){
-      this.direction = 1;
-    }
-    this.speed+=0.5;
+    this.direction = this.direction*-1;
   }
 
   // On wall collision, bounce and follow the appropriate angle
-  wallBounce(){
-    if (this.yPos > 200) {
-      this.angle = -20;
+  wallBounce(position){
+    if (position === "top") {
+      this.angle = -10;
     }
-    else if (this.yPos < 200){
-      this.angle = -20;
+    else if (position === "bottom"){
+      this.angle = 10;
     }
   }
 
   // Called when ball moves past player paddle
   goal(ballPos, paddle1X, paddle2X){
-    this.direction = this.direction * -1;
     // Scored on player 1
     if (ballPos < paddle1X) {
       p2.score++;
@@ -87,6 +104,9 @@ class Ball {
       this.direction = -1; // go towards player 2
     }
     this.xPos = -20;
+    this.yPos = 0;
+    this.angle = 0;
+    this.direction = this.direction * -1;
   }
 
   // Called when ball moves
@@ -156,17 +176,18 @@ let p2 = new Paddle(200, 0, 0, 2, paddleDistance);
 let ball = new Ball(10, 0, speed, ballDistance, 1, 0);
 
 // Declare paddle and ball variables
-let p1Ypos = paddle1.top = 20;
-let p2Ypos = paddle2.top = 20;
+let p1Ypos = paddle1.top = 40;
+let p2Ypos = paddle2.top = 40;
 
 // Initialize score variables
 let p1score = document.getElementById("p1-score");
 let p2score = document.getElementById("p2-score");
 
+// Game variables
 let time = ball.speed*8; // Change as necessary - determines ball speed
 let winner = document.getElementById("winner");
 let winnerNumber = 0;
-let winScore = 1;
+let winScore = 5;
 
 // Player Controls
 document.addEventListener("keydown", function(e) {
@@ -202,34 +223,17 @@ document.addEventListener("keydown", function(e) {
       gameStart();
   }
 })
-
-  gameStart();
+  
+  // Begin game 
+  gameStart();  
   
   // Main gameplay loop
   setInterval(function() {
     if (p1.score >= winScore || p2.score >= winScore){
       gameEnd();
     }
-
-    console.log("Ball x position: " + ball.xPos);
-    console.log("Ball y position: " + ball.yPos);
-    console.log("P1 x position: " + p1.xPos);
-    console.log("P1 y position: " + p1.yPos);
-    console.log("P1 height: " + p1.height);
-    
-    if (ball.xPos == p1.xPos && ball.yPos 
-        >= p1.yPos && ball.yPos < p1.height){
-      console.log("Player 1 bounce!");
-      ball.paddleBounce(p1.yPos);
-    }
-    else if (ball.xPos == p2.xPos && ball.yPos 
-              >= p2.yPos && ball.yPos < p2.height) {
-      console.log("Player 2 bounce!")
-      ball.paddleBounce(p2.yPos);
-    }
-    else if (ball.xPos < p1.xPos || ball.xPos > p2.xPos) {
-      ball.goal(ball.xPos, p1.xPos, p2.xPos);
-    }
+    // Decide ball's next position based on current position
+    ball.checkPosition(p1.xPos, p1.yPos, p1.height, p2.xPos, p2.yPos, p2.height);
     ball.ballMove(paddleBall);
-    //console.log("Ball x position: " + ball.xPos);
+    console.log("Ball y pos: " + ball.yPos);
   }, time);
