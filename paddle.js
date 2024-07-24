@@ -42,12 +42,12 @@ class Ball {
     }
 
     // Check paddle collision
-    if (this.xPos === p1Xpos && (this.yPos + 40)
+    if (this.xPos <= p1Xpos && (this.yPos + 40)
       >= p1Ypos && (this.yPos + 40) < p1Height){
       console.log("Player 1 bounce!");
       ball.paddleBounce(p1Ypos);
     }
-    else if (this.xPos === p2Xpos && (this.yPos + 40)
+    else if (this.xPos >= p2Xpos && (this.yPos + 40)
             >= p2Ypos && (this.yPos + 40) < p2Height) {
       console.log("Player 2 bounce!")
       ball.paddleBounce(p2Ypos);
@@ -63,7 +63,7 @@ class Ball {
     // On paddle collision, reverse direction; angle depends on section of paddle hit (top, middle, bottom)
     // Top
 
-    const ballYPos = ball.yPos + 40;
+    const ballYPos = ball.yPos - 40;
     if (ballYPos < paddleYpos*0.45) {
       this.angle = -10;
     }
